@@ -48,6 +48,7 @@
 #include <map>
 #include <set> // TODO: unordered_set?
 #include <sstream>
+#include <string>
 using namespace llvm;
 
 #include <OptPasses.h>

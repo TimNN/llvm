@@ -7,6 +7,8 @@
 // which are reported as declared but not implemented symbols, so that
 // JS linking brings them in.
 
+#include <string>
+
 typedef std::string (JSWriter::*CallHandler)(const Instruction*, std::string Name, int NumArgs);
 typedef std::map<std::string, CallHandler> CallHandlerMap;
 CallHandlerMap CallHandlers;
