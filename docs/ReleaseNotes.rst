@@ -20,9 +20,18 @@ have questions or comments, the `LLVM Developer's Mailing List
 <http://lists.llvm.org/mailman/listinfo/llvm-dev>`_ is a good place to send
 them.
 
+New Versioning Scheme
+=====================
+Starting with this release, LLVM is using a
+`new versioning scheme <http://blog.llvm.org/2016/12/llvms-new-versioning-scheme.html>`_,
+increasing the major version number with each major release. Stable updates to
+this release will be versioned 4.0.x, and the next major release, six months
+from now, will be version 5.0.0.
+
 Non-comprehensive list of changes in this release
 =================================================
-* Minimum compiler version to build has been raised to GCC 4.8 and VS 2015.
+* The minimum compiler version required for building LLVM has been raised to
+  4.8 for GCC and 2015 for Visual Studio.
 
 * The C API functions ``LLVMAddFunctionAttr``, ``LLVMGetFunctionAttr``,
   ``LLVMRemoveFunctionAttr``, ``LLVMAddAttribute``, ``LLVMRemoveAttribute``,
@@ -48,15 +57,8 @@ Non-comprehensive list of changes in this release
   with LLVM option ``-adce-remove-loops`` when the loop body otherwise has
   no live operations.
 
-* The GVNHoist pass is now enabled by default. The new pass based on Global
-  Value Numbering detects similar computations in branch code and replaces
-  multiple instances of the same computation with a unique expression.  The
-  transform benefits code size and generates better schedules.  GVNHoist is
-  more aggressive at ``-Os`` and ``-Oz``, hoisting more expressions at the
-  expense of execution time degradations.
-
- * The llvm-cov tool can now export coverage data as json. Its html output mode
-   has also improved.
+* The llvm-cov tool can now export coverage data as json. Its html output mode
+  has also improved.
 
 Improvements to ThinLTO (-flto=thin)
 ------------------------------------
@@ -217,6 +219,10 @@ Changes to the ARM Targets
 A lot of work has also been done in LLD for ARM, which now supports more
 relocations and TLS.
 
+Note: From the next release (5.0), the "vulcan" target will be renamed to
+"thunderx2t99", including command line options, assembly directives, etc. This
+release (4.0) will be the last one to accept "vulcan" as its name.
+
 Changes to the AVR Target
 -----------------------------
 
@@ -237,6 +243,43 @@ LLVM trunk.
 Most of the work behind the scenes has been on correctness of generated
 assembly, and also fixing some assertions we would hit on some well-formed
 inputs.
+
+Changes to the MIPS Target
+-----------------------------
+
+**During this release the MIPS target has:**
+
+* IAS is now enabled by default for Debian mips64el.
+* Added support for the two operand form for many instructions.
+* Added the following macros: unaligned load/store, seq, double word load/store for O32.
+* Improved the parsing of complex memory offset expressions.
+* Enabled the integrated assembler by default for Debian mips64el.
+* Added a generic scheduler based on the interAptiv CPU.
+* Added support for thread local relocations.
+* Added recip, rsqrt, evp, dvp, synci instructions in IAS.
+* Optimized the generation of constants from some cases.
+
+**The following issues have been fixed:**
+
+* Thread local debug information is correctly recorded.
+* MSA intrinsics are now range checked.
+* Fixed an issue with MSA and the no-odd-spreg abi.
+* Fixed some corner cases in handling forbidden slots for MIPSR6.
+* Fixed an issue with jumps not being converted to relative branches for assembly.
+* Fixed the handling of local symbols and jal instruction.
+* N32/N64 no longer have their relocation tables sorted as per their ABIs.
+* Fixed a crash when half-precision floating point conversion MSA intrinsics are used.
+* Fixed several crashes involving FastISel.
+* Corrected the corrected definitions for aui/daui/dahi/dati for MIPSR6.
+
+Changes to the X86 Target
+-------------------------
+
+**During this release the X86 target has:**
+
+* Added support AMD Ryzen (znver1) CPUs.
+* Gained support for using VEX encoding on AVX-512 CPUs to reduce code size when possible.
+* Improved AVX-512 codegen.
 
 Changes to the OCaml bindings
 -----------------------------
@@ -262,6 +305,34 @@ combined with LLVM as backend to produce efficient native code. LDC targets
 x86/x86_64 systems like Linux, OS X, FreeBSD and Windows and also Linux on ARM
 and PowerPC (32/64 bit). Ports to other architectures like AArch64 and MIPS64
 are underway.
+
+Portable Computing Language (pocl)
+----------------------------------
+
+In addition to producing an easily portable open source OpenCL
+implementation, another major goal of `pocl <http://pocl.sourceforge.net/>`_
+is improving performance portability of OpenCL programs with
+compiler optimizations, reducing the need for target-dependent manual
+optimizations. An important part of pocl is a set of LLVM passes used to
+statically parallelize multiple work-items with the kernel compiler, even in
+the presence of work-group barriers. This enables static parallelization of
+the fine-grained static concurrency in the work groups in multiple ways.
+
+TTA-based Co-design Environment (TCE)
+-------------------------------------
+
+`TCE <http://tce.cs.tut.fi/>`_ is a toolset for designing customized
+processors based on the Transport Triggered Architecture (TTA).
+The toolset provides a complete co-design flow from C/C++
+programs down to synthesizable VHDL/Verilog and parallel program binaries.
+Processor customization points include register files, function units,
+supported operations, and the interconnection network.
+
+TCE uses Clang and LLVM for C/C++/OpenCL C language support, target independent
+optimizations and also for parts of code generation. It generates new
+LLVM-based code generators "on the fly" for the designed TTA processors and
+loads them in to the compiler backend as runtime libraries to avoid
+per-target recompilation of larger parts of the compiler chain.
 
 
 Additional Information
