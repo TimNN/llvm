@@ -247,6 +247,13 @@ bool PPCCTRLoops::mightUseCTR(const Triple &TT, BasicBlock *BB) {
         // sin, cos, exp and log are always calls.
         unsigned Opcode = 0;
         if (F->getIntrinsicID() != Intrinsic::not_intrinsic) {
+          // Preemtively assume intrinsics operating on 128 integers use CTR
+          for (unsigned OID = 0; OID < CI->getNumArgOperands(); OID++) {
+            if (isLargeIntegerTy(false, CI->getArgOperand(OID)->getType()->getScalarType())) {
+              return true;
+            }
+          }
+
           switch (F->getIntrinsicID()) {
           default: continue;
           // If we have a call to ppc_is_decremented_ctr_nonzero, or ppc_mtctr
