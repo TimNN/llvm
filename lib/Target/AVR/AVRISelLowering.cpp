@@ -64,10 +64,10 @@ AVRTargetLowering::AVRTargetLowering(AVRTargetMachine &tm)
   setTruncStoreAction(MVT::i16, MVT::i8, Expand);
 
   for (MVT VT : MVT::integer_valuetypes()) {
-    setOperationAction(ISD::ADDC, VT, Legal);
-    setOperationAction(ISD::SUBC, VT, Legal);
-    setOperationAction(ISD::ADDE, VT, Legal);
-    setOperationAction(ISD::SUBE, VT, Legal);
+    // setOperationAction(ISD::ADDC, VT, Legal);
+    // setOperationAction(ISD::SUBC, VT, Legal);
+    // setOperationAction(ISD::ADDE, VT, Legal);
+    // setOperationAction(ISD::SUBE, VT, Legal);
   }
 
   // sub (x, imm) gets canonicalized to add (x, -imm), so for illegal types
